@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>البرق الفتيحي | AI Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050810;--surface:#0a0f1e;--card:#0d1426;--border:rgba(99,179,237,0.12);--accent:#00d4ff;--accent2:#7c3aed;--accent3:#10b981;--text:#e2e8f0;--muted:#94a3b8}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Tajawal',sans-serif;overflow-x:hidden;cursor:none}
+.cursor{width:12px;height:12px;background:var(--accent);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform 0.1s;mix-blend-mode:screen}
+.cursor-ring{width:36px;height:36px;border:1px solid rgba(0,212,255,0.5);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:all 0.15s ease}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0}
+.orb-1{width:400px;height:400px;background:rgba(0,212,255,0.05);top:-100px;right:-100px}
+.orb-2{width:300px;height:300px;background:rgba(124,58,237,0.05);bottom:200px;left:-80px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;display:flex;justify-content:space-between;align-items:center;background:rgba(5,8,16,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Space Mono',monospace;font-size:18px;color:var(--accent);letter-spacing:2px;text-decoration:none}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.3s}
+.nav-links a:hover{color:var(--accent)}
+.lang-btn{background:transparent;border:1px solid var(--border);color:var(--accent);padding:5px 14px;border-radius:20px;cursor:pointer;font-family:'Space Mono',monospace;font-size:12px;transition:all 0.3s}
+.lang-btn:hover{background:var(--accent);color:var(--bg)}
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 40px 80px;position:relative;z-index:1}
+.hero-content{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);padding:6px 16px;border-radius:20px;font-size:13px;color:var(--accent);margin-bottom:22px;font-family:'Space Mono',monospace}
+.hero-badge .dot{width:6px;height:6px;background:var(--accent3);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.5)}}
+.hero h1{font-size:clamp(38px,5.5vw,68px);font-weight:900;line-height:1.1;margin-bottom:6px;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-subtitle{font-family:'Space Mono',monospace;font-size:14px;color:var(--accent);margin-bottom:6px;letter-spacing:2px}
+.hero-uni{font-size:13px;color:var(--muted);margin-bottom:18px;font-family:'Space Mono',monospace}
+.hero-desc{font-size:15px;color:#cbd5e1;line-height:1.85;margin-bottom:28px;max-width:500px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;padding:13px 26px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all 0.3s;text-decoration:none;display:inline-block}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,212,255,0.3)}
+.btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border);padding:13px 26px;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all 0.3s;text-decoration:none;display:inline-block}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.social-links{display:flex;gap:10px;flex-wrap:wrap}
+.social-link{display:flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:12px;font-family:'Space Mono',monospace;border:1px solid var(--border);padding:6px 13px;border-radius:8px;transition:all 0.3s}
+.social-link:hover{color:var(--accent);border-color:var(--accent);background:rgba(0,212,255,0.05)}
+.hero-visual{position:relative;display:flex;justify-content:center;align-items:center}
+.hero-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px 24px;width:100%;max-width:340px;position:relative;overflow:hidden}
+.hero-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at center,rgba(0,212,255,0.04) 0%,transparent 60%);animation:rotate 8s linear infinite}
+@keyframes rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.lightning-logo{width:84px;height:84px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.lightning-logo svg{width:100%;height:100%;filter:drop-shadow(0 0 14px rgba(0,212,255,0.6));animation:lgPulse 2s ease-in-out infinite}
+@keyframes lgPulse{0%,100%{filter:drop-shadow(0 0 10px rgba(0,212,255,0.5))}50%{filter:drop-shadow(0 0 26px rgba(0,212,255,0.9)) drop-shadow(0 0 46px rgba(124,58,237,0.4))}}
+.hero-card h3{text-align:center;font-size:18px;font-weight:800;margin-bottom:2px;position:relative;z-index:1}
+.hero-card .role{text-align:center;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;margin-bottom:3px;position:relative;z-index:1}
+.hero-card .uni{text-align:center;font-size:11px;color:var(--muted);margin-bottom:16px;position:relative;z-index:1}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;position:relative;z-index:1}
+.stat-item{background:rgba(0,212,255,0.05);border:1px solid var(--border);border-radius:10px;padding:10px 4px;text-align:center}
+.stat-num{font-size:20px;line-height:1.2}
+.stat-label{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.2}
+.float-badge{position:absolute;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:7px 13px;font-size:11px;font-family:'Space Mono',monospace;color:var(--accent3);animation:floatAnim 3s ease-in-out infinite;white-space:nowrap;z-index:2}
+.float-badge.top{top:-14px;right:-28px}
+.float-badge.bottom{bottom:-14px;left:-28px;animation-delay:1.5s}
+@keyframes floatAnim{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+section{padding:96px 40px;position:relative;z-index:1}
+.container{max-width:1200px;margin:0 auto}
+.section-label{font-family:'Space Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:10px}
+.section-title{font-size:clamp(28px,4vw,42px);font-weight:900;margin-bottom:12px;line-height:1.1}
+.section-desc{color:#94a3b8;font-size:16px;max-width:500px;line-height:1.7;margin-bottom:52px}
+#skills{background:var(--surface)}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.skill-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;transition:all 0.3s;position:relative;overflow:hidden}
+.skill-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transition:transform 0.3s;transform-origin:right}
+.skill-card:hover::before{transform:scaleX(1);transform-origin:left}
+.skill-card:hover{transform:translateY(-4px);border-color:rgba(0,212,255,0.22)}
+.skill-icon{font-size:28px;margin-bottom:13px}
+.skill-card h3{font-size:16px;font-weight:700;margin-bottom:7px}
+.skill-card p{font-size:13px;color:#94a3b8;line-height:1.65;margin-bottom:14px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.15);color:var(--accent);padding:3px 9px;border-radius:20px;font-size:11px;font-family:'Space Mono',monospace}
+.knowledge-section{margin-top:14px}
+.knowledge-item{margin-bottom:9px}
+.knowledge-label{display:flex;justify-content:space-between;font-size:12px;color:#94a3b8;margin-bottom:4px}
+.knowledge-bar{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
+.knowledge-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:right;transition:transform 1s ease 0.3s}
+.fade-up.visible .knowledge-fill{transform:scaleX(1)}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px}
+.project-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all 0.3s}
+.project-card:hover{transform:translateY(-6px);border-color:rgba(0,212,255,0.22);box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.project-img{height:150px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;overflow:hidden}
+.project-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--card))}
+.project-body{padding:20px}
+.project-type{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent2);letter-spacing:2px;margin-bottom:7px}
+.project-body h3{font-size:17px;font-weight:800;margin-bottom:8px}
+.project-body p{font-size:13px;color:#94a3b8;line-height:1.65;margin-bottom:14px}
+.project-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.project-stack{display:flex;gap:5px;flex-wrap:wrap}
+.project-link{color:var(--accent);font-size:12px;text-decoration:none;font-family:'Space Mono',monospace;border:1px solid rgba(0,212,255,0.2);padding:4px 11px;border-radius:6px;transition:all 0.3s;white-space:nowrap}
+.project-link:hover{background:rgba(0,212,255,0.1)}
+.github-banner{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;margin-top:22px;text-decoration:none;transition:all 0.3s}
+.github-banner:hover{border-color:rgba(0,212,255,0.28)}
+.github-banner p{color:#94a3b8;font-size:14px}
+.github-banner p span{color:var(--accent);font-weight:700}
+#certificates{background:var(--surface)}
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.cert-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;display:flex;gap:13px;align-items:flex-start;transition:all 0.3s}
+.cert-card:hover{border-color:rgba(124,58,237,0.32);transform:translateX(-4px)}
+.cert-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.cert-info h4{font-size:13px;font-weight:700;margin-bottom:3px}
+.cert-info p{font-size:12px;color:#94a3b8;margin-bottom:5px}
+.cert-date{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent3);display:block;margin-bottom:6px}
+.cert-btn{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);background:transparent;border:1px solid rgba(0,212,255,0.2);padding:4px 10px;border-radius:6px;cursor:pointer;transition:all 0.3s}
+.cert-btn:hover{background:rgba(0,212,255,0.1)}
+.interests-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:14px}
+.interest-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;transition:all 0.3s}
+.interest-item:hover{border-color:rgba(0,212,255,0.28);transform:scale(1.03);background:rgba(0,212,255,0.04)}
+.interest-emoji{font-size:32px;margin-bottom:9px}
+.interest-item h4{font-size:13px;font-weight:700;margin-bottom:3px}
+.interest-item p{font-size:12px;color:#94a3b8}
+#contact{background:var(--surface)}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.contact-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;display:flex;gap:14px;align-items:center;text-decoration:none;transition:all 0.3s}
+.contact-card:hover{border-color:rgba(0,212,255,0.28);transform:translateY(-3px)}
+.contact-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.contact-icon.linkedin{background:rgba(10,102,194,0.18);border:1px solid rgba(10,102,194,0.28)}
+.contact-icon.github{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+.contact-icon.email{background:rgba(0,212,255,0.09);border:1px solid rgba(0,212,255,0.18)}
+.contact-info h4{font-size:14px;font-weight:700;margin-bottom:3px;color:var(--text)}
+.contact-info p{font-size:12px;color:#94a3b8;font-family:'Space Mono',monospace;word-break:break-all}
+.chat-fab{position:fixed;bottom:30px;left:30px;z-index:1000}
+.chat-btn{width:58px;height:58px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 8px 32px rgba(0,212,255,0.4);transition:all 0.3s;position:relative}
+.chat-btn:hover{transform:scale(1.1)}
+.chat-btn .notif{position:absolute;top:-4px;right:-4px;width:16px;height:16px;background:var(--accent3);border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;animation:pulse 2s infinite}
+.chat-window{position:fixed;bottom:104px;left:30px;width:375px;max-height:550px;background:var(--card);border:1px solid var(--border);border-radius:20px;display:flex;flex-direction:column;z-index:1000;box-shadow:0 24px 80px rgba(0,0,0,0.6);overflow:hidden;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);transform-origin:bottom left}
+.chat-window.hidden{transform:scale(0.8);opacity:0;pointer-events:none}
+.chat-header{padding:15px 17px;background:linear-gradient(135deg,rgba(0,212,255,0.08),rgba(124,58,237,0.08));border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.chat-avatar{width:36px;height:36px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.chat-header-info h4{font-size:14px;font-weight:700}
+.chat-header-info p{font-size:11px;color:var(--accent3);font-family:'Space Mono',monospace}
+.chat-close{margin-right:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:3px;transition:color 0.3s}
+.chat-close:hover{color:var(--text)}
+.chat-messages{flex:1;overflow-y:auto;padding:13px;display:flex;flex-direction:column;gap:9px;max-height:310px}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.msg{max-width:85%;padding:10px 13px;border-radius:13px;font-size:13px;line-height:1.6;animation:msgIn 0.3s ease;color:#e2e8f0}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.1);align-self:flex-start;border-radius:13px 13px 13px 2px;padding:12px 14px}
+.msg.user{background:linear-gradient(135deg,rgba(0,212,255,0.11),rgba(124,58,237,0.11));border:1px solid rgba(124,58,237,0.18);align-self:flex-end;border-radius:13px 13px 2px 13px}
+.msg.typing{display:flex;gap:4px;align-items:center;padding:13px}
+.typing-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:typingBounce 1.2s ease infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typingBounce{0%,100%{transform:translateY(0);opacity:0.4}50%{transform:translateY(-4px);opacity:1}}
+.bot-para{font-size:13px;color:#e2e8f0;line-height:1.65;margin-bottom:6px}
+.bot-para:last-child{margin-bottom:0}
+.bot-section-title{font-size:11px;font-weight:700;color:var(--accent);font-family:'Space Mono',monospace;letter-spacing:0.5px;margin:10px 0 6px;padding-bottom:4px;border-bottom:1px solid rgba(0,212,255,0.15)}
+.bot-section-title:first-child{margin-top:0}
+.bot-list{display:flex;flex-direction:column;gap:5px;margin:5px 0}
+.bot-list-item{display:flex;align-items:flex-start;gap:8px;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.09);border-radius:8px;padding:8px 10px;font-size:12.5px;color:#e2e8f0;line-height:1.55}
+.bot-list-item strong{color:var(--accent);font-weight:700}
+.bot-num{min-width:20px;height:20px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;font-family:'Space Mono',monospace;flex-shrink:0;margin-top:1px}
+.bot-bullet{font-size:10px;color:var(--accent);flex-shrink:0;margin-top:3px}
+.chat-suggestions{padding:7px 13px 9px;display:flex;gap:6px;flex-wrap:wrap}
+.suggestion-btn{background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.14);color:var(--accent);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all 0.2s}
+.suggestion-btn:hover{background:rgba(0,212,255,0.13)}
+.chat-input-area{padding:10px 13px;border-top:1px solid var(--border);display:flex;gap:7px}
+.chat-input{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--text);padding:9px 12px;border-radius:9px;font-size:13px;font-family:'Tajawal',sans-serif;outline:none;transition:border-color 0.3s}
+.chat-input:focus{border-color:var(--accent)}
+.chat-send{width:37px;height:37px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all 0.3s;flex-shrink:0}
+.chat-send:hover{transform:scale(1.06)}
+.chat-send:disabled{opacity:0.5;cursor:not-allowed}
+.cert-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.cert-modal-overlay.open{opacity:1;pointer-events:all}
+.cert-modal{background:var(--card);border:1px solid rgba(0,212,255,0.2);border-radius:20px;padding:32px;max-width:420px;width:100%;position:relative;transform:scale(0.9);transition:transform 0.3s;box-shadow:0 24px 80px rgba(0,0,0,0.6)}
+.cert-modal-overlay.open .cert-modal{transform:scale(1)}
+.cert-modal-icon{font-size:44px;text-align:center;margin-bottom:14px}
+.cert-modal h3{font-size:18px;font-weight:800;margin-bottom:5px;text-align:center}
+.cert-modal-source{font-size:13px;color:var(--muted);text-align:center;margin-bottom:22px;font-family:'Space Mono',monospace}
+.cert-modal-btn{display:block;width:100%;padding:13px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Tajawal',sans-serif;text-decoration:none;text-align:center;transition:all 0.3s;margin-bottom:10px}
+.cert-modal-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,255,0.3)}
+.cert-modal-btn.pending{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--muted);cursor:default}
+.cert-modal-btn.pending:hover{transform:none;box-shadow:none}
+.cert-modal-close{position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.06);border:none;color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.3s}
+.cert-modal-close:hover{color:var(--text);background:rgba(255,255,255,0.1)}
+.cert-modal-note{font-size:12px;color:var(--muted);text-align:center;line-height:1.6}
+.cert-modal-note span{color:var(--accent3)}
+footer{background:var(--bg);border-top:1px solid var(--border);padding:32px 40px;text-align:center;position:relative;z-index:1}
+footer p{color:var(--muted);font-size:13px;font-family:'Space Mono',monospace}
+footer span{color:var(--accent)}
+.fade-up{opacity:0;transform:translateY(26px);transition:all 0.6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+@media(max-width:768px){nav{padding:13px 16px}.nav-links{display:none}.hero{padding:90px 16px 60px}.hero-content{grid-template-columns:1fr;gap:34px}.hero-visual{order:-1}.hero-card{max-width:290px;margin:0 auto}.float-badge{display:none}section{padding:58px 16px}.stats-grid{grid-template-columns:repeat(2,1fr)}.chat-window{left:10px;right:10px;width:auto;bottom:84px}.chat-fab{left:16px;bottom:16px}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<nav>
+  <a href="#" class="nav-logo">&#x26A1; AL-BARQ</a>
+  <ul class="nav-links">
+    <li><a href="#skills" data-ar="&#x627;&#x644;&#x645;&#x647;&#x627;&#x631;&#x627;&#x62A;" data-en="Skills">&#x627;&#x644;&#x645;&#x647;&#x627;&#x631;&#x627;&#x62A;</a></li>
+    <li><a href="#projects" data-ar="&#x627;&#x644;&#x645;&#x634;&#x627;&#x631;&#x64A;&#x639;" data-en="Projects">&#x627;&#x644;&#x645;&#x634;&#x627;&#x631;&#x64A;&#x639;</a></li>
+    <li><a href="#certificates" data-ar="&#x627;&#x644;&#x634;&#x647;&#x627;&#x62F;&#x627;&#x62A;" data-en="Certificates">&#x627;&#x644;&#x634;&#x647;&#x627;&#x62F;&#x627;&#x62A;</a></li>
+    <li><a href="#interests" data-ar="&#x627;&#x644;&#x627;&#x647;&#x62A;&#x645;&#x627;&#x645;&#x627;&#x62A;" data-en="Interests">&#x627;&#x644;&#x627;&#x647;&#x62A;&#x645;&#x627;&#x645;&#x627;&#x62A;</a></li>
+    <li><a href="#contact" data-ar="&#x62A;&#x648;&#x627;&#x635;&#x644;" data-en="Contact">&#x62A;&#x648;&#x627;&#x635;&#x644;</a></li>
+    <li><button class="lang-btn" onclick="toggleLang()" id="langBtn">EN</button></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-content container">
+    <div class="hero-text">
+      <div class="hero-badge"><span class="dot"></span><span data-ar="متاح للعمل · خريج جديد" data-en="Available for Work · Fresh Graduate">متاح للعمل · خريج جديد</span></div>
+      <p class="hero-subtitle">AI PRODUCT ENGINEER</p>
+      <h1 data-ar="البرق الفتيحي" data-en="Al-Barq Al-Futaihi">البرق الفتيحي</h1>
+      <p class="hero-uni" data-ar="علوم الحاسب · جامعة القصيم" data-en="Computer Science · Qassim University">علوم الحاسب · جامعة القصيم</p>
+      <p class="hero-desc" data-ar="خريج علوم حاسب شغوف بالذكاء الاصطناعي وتعلم الآلة وتحليل البيانات. مهتم بهندسة البرمجيات وبناء تطبيقات مدمجة بالـ AI، مع وعي قوي بالأمن السيبراني وحماية الحسابات والمعلومات. أتابع أحدث التقنيات وأطوّر مهاراتي باستمرار عبر المشاريع التطبيقية." data-en="CS graduate passionate about AI, Machine Learning, and data analysis. Interested in Software Engineering and building AI-powered applications, with strong awareness of cybersecurity and data protection. Continuously following the latest technologies and growing through hands-on projects.">خريج علوم حاسب شغوف بالذكاء الاصطناعي وتعلم الآلة وتحليل البيانات. مهتم بهندسة البرمجيات وبناء تطبيقات مدمجة بالـ AI، مع وعي قوي بالأمن السيبراني وحماية الحسابات والمعلومات. أتابع أحدث التقنيات وأطوّر مهاراتي باستمرار عبر المشاريع التطبيقية.</p>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-primary" data-ar="استعرض مشاريعي" data-en="View Projects">استعرض مشاريعي</a>
+        <a href="#contact" class="btn-secondary" data-ar="تواصل معي" data-en="Contact Me">تواصل معي</a>
+      </div>
+      <div class="social-links">
+        <a href="https://www.linkedin.com/in/albarq-alfutaihi" target="_blank" class="social-link">💼 LinkedIn</a>
+        <a href="https://github.com/Albarq-CS" target="_blank" class="social-link">🐙 GitHub</a>
+        <a href="mailto:aq.tech10@gmail.com" class="social-link">✉️ Email</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="float-badge top">⚡ AI Engineer</div>
+        <div class="lightning-logo">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#00d4ff"/><stop offset="100%" style="stop-color:#7c3aed"/>
+              </linearGradient>
+              <filter id="glow"><feGaussianBlur stdDeviation="2.5" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <circle cx="50" cy="50" r="46" fill="rgba(0,212,255,0.06)" stroke="url(#lg1)" stroke-width="1.5"/>
+            <polygon points="58,8 28,52 50,52 42,92 72,48 50,48" fill="url(#lg1)" filter="url(#glow)"/>
+          </svg>
+        </div>
+        <h3 data-ar="البرق الفتيحي" data-en="Al-Barq Al-Futaihi">البرق الفتيحي</h3>
+        <p class="role">AI Product Engineer</p>
+        <p class="uni" data-ar="جامعة القصيم · علوم الحاسب" data-en="Qassim Univ. · CS">جامعة القصيم · علوم الحاسب</p>
+        <div class="stats-grid">
+          <div class="stat-item"><div class="stat-num">🤖</div><div class="stat-label">AI · ML</div></div>
+          <div class="stat-item"><div class="stat-num">⚙️</div><div class="stat-label" data-ar="سوفت انجنيرنق" data-en="Software Eng">سوفت انجنيرنق</div></div>
+          <div class="stat-item"><div class="stat-num">📊</div><div class="stat-label" data-ar="بيانات · كلاود" data-en="Data · Cloud">بيانات · كلاود</div></div>
+          <div class="stat-item"><div class="stat-num">🔐</div><div class="stat-label" data-ar="سايبر" data-en="Cyber">سايبر</div></div>
+        </div>
+        <div class="float-badge bottom">🚀 Open to Work</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <p class="section-label">/// TECHNICAL SKILLS</p>
+    <h2 class="section-title fade-up" data-ar="ما أجيده" data-en="What I Do">ما أجيده</h2>
+    <p class="section-desc fade-up" data-ar="مجموعة متنوعة من المهارات التقنية تمكّنني من بناء حلول متكاملة." data-en="A diverse set of technical skills enabling me to build complete solutions.">مجموعة متنوعة من المهارات التقنية تمكّنني من بناء حلول متكاملة.</p>
+    <div class="skills-grid">
+      <div class="skill-card fade-up">
+        <div class="skill-icon">💻</div>
+        <h3 data-ar="لغات البرمجة" data-en="Programming Languages">لغات البرمجة</h3>
+        <p data-ar="إتقان متعدد اللغات يتيح حل المشاكل بالأداة الأنسب لكل موقف." data-en="Multi-language proficiency to solve problems with the right tool.">إتقان متعدد اللغات يتيح حل المشاكل بالأداة الأنسب لكل موقف.</p>
+        <div class="skill-tags"><span class="tag">Python</span><span class="tag">PHP</span><span class="tag">Java</span><span class="tag">C++</span><span class="tag">C</span><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">MySQL</span></div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon">⚙️</div>
+        <h3 data-ar="أُطر العمل" data-en="Frameworks">أُطر العمل</h3>
+        <p data-ar="استخدام أُطر عمل حديثة لبناء تطبيقات ويب سريعة وقابلة للتطوير." data-en="Using modern frameworks to build fast and scalable web applications.">استخدام أُطر عمل حديثة لبناء تطبيقات ويب سريعة وقابلة للتطوير.</p>
+        <div class="skill-tags"><span class="tag">Laravel</span><span class="tag">Django</span></div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon">🤖</div>
+        <h3 data-ar="الذكاء الاصطناعي والتعلم الآلي" data-en="AI & Machine Learning">الذكاء الاصطناعي والتعلم الآلي</h3>
+        <p data-ar="معرفة في بناء نماذج الذكاء الاصطناعي ودمجها في تطبيقات حقيقية." data-en="Knowledge in building and integrating AI models into real applications.">معرفة في بناء نماذج الذكاء الاصطناعي ودمجها في تطبيقات حقيقية.</p>
+        <div class="knowledge-section">
+          <div class="knowledge-item"><div class="knowledge-label"><span>Machine Learning</span><span>أساسيات</span></div><div class="knowledge-bar"><div class="knowledge-fill" style="width:55%"></div></div></div>
+          <div class="knowledge-item"><div class="knowledge-label"><span>AI APIs</span><span>متوسط</span></div><div class="knowledge-bar"><div class="knowledge-fill" style="width:65%"></div></div></div>
+        </div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon">🌐</div>
+        <h3 data-ar="الشبكات" data-en="Networking">الشبكات</h3>
+        <p data-ar="فهم قوي لبروتوكولات الشبكات وبنية الأنظمة وأمن المعلومات." data-en="Strong understanding of network protocols, system architecture, and security.">فهم قوي لبروتوكولات الشبكات وبنية الأنظمة وأمن المعلومات.</p>
+        <div class="knowledge-section">
+          <div class="knowledge-item"><div class="knowledge-label"><span>Networking</span><span>جيد</span></div><div class="knowledge-bar"><div class="knowledge-fill" style="width:70%"></div></div></div>
+          <div class="knowledge-item"><div class="knowledge-label"><span>Cybersecurity</span><span>متعلم · مهتم</span></div><div class="knowledge-bar"><div class="knowledge-fill" style="width:50%"></div></div></div>
+        </div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon">🔧</div>
+        <h3 data-ar="تطوير الويب" data-en="Web Development">تطوير الويب</h3>
+        <p data-ar="بناء تطبيقات ويب متكاملة من الواجهة الأمامية حتى الخادم وقاعدة البيانات." data-en="Building full-stack web apps from frontend to backend and database.">بناء تطبيقات ويب متكاملة من الواجهة الأمامية حتى الخادم وقاعدة البيانات.</p>
+        <div class="knowledge-section"><div class="knowledge-item"><div class="knowledge-label"><span>Full Stack</span><span>متوسط</span></div><div class="knowledge-bar"><div class="knowledge-fill" style="width:60%"></div></div></div></div>
+        <div class="skill-tags" style="margin-top:12px"><span class="tag">Laravel</span><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">REST API</span></div>
+      </div>
+      <div class="skill-card fade-up">
+        <div class="skill-icon">🛠️</div>
+        <h3 data-ar="أدوات التطوير" data-en="Dev Tools">أدوات التطوير</h3>
+        <p data-ar="استخدام أدوات احترافية لضمان جودة الكود وكفاءة سير العمل." data-en="Using professional tools to ensure code quality and efficient workflow.">استخدام أدوات احترافية لضمان جودة الكود وكفاءة سير العمل.</p>
+        <div class="skill-tags"><span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">Linux</span><span class="tag">VS Code</span><span class="tag">SQLite</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <p class="section-label">/// PROJECTS</p>
+    <h2 class="section-title fade-up" data-ar="ما بنيته" data-en="What I Built">ما بنيته</h2>
+    <p class="section-desc fade-up" data-ar="مشاريع حقيقية تعكس شغفي بالتطوير وحل المشاكل عبر التقنية." data-en="Real projects reflecting my passion for development and problem-solving.">مشاريع حقيقية تعكس شغفي بالتطوير وحل المشاكل عبر التقنية.</p>
+    <div class="projects-grid">
+      <div class="project-card fade-up">
+        <div class="project-img" style="background:linear-gradient(135deg,#0d1f3c,#1a2a4a)">🎓</div>
+        <div class="project-body">
+          <p class="project-type">FULL STACK · WEB</p>
+          <h3>GradTrack System</h3>
+          <p data-ar="نظام لإدارة مشاريع التخرج يُنظّم الطلبات والتواصل بين الطلاب والدكاترة بكفاءة، مع إمكانية تطوير الإشعارات الفورية وتقارير التقدم." data-en="A graduation project management system organizing requests and communication between students and advisors, with potential for real-time notifications.">نظام لإدارة مشاريع التخرج يُنظّم الطلبات والتواصل بين الطلاب والدكاترة بكفاءة، مع إمكانية تطوير الإشعارات الفورية وتقارير التقدم.</p>
+          <div class="project-footer">
+            <div class="project-stack"><span class="tag">Laravel</span><span class="tag">PHP</span><span class="tag">MySQL</span></div>
+            <a href="https://github.com/Albarq-CS/GradTrack-System" target="_blank" class="project-link">GitHub →</a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card fade-up">
+        <div class="project-img" style="background:linear-gradient(135deg,#0d2a1f,#1a3d2a)">📚</div>
+        <div class="project-body">
+          <p class="project-type">JAVA · GUI · DATABASE</p>
+          <h3>Online Library Management</h3>
+          <p data-ar="تطبيق Java بواجهة رسومية مع صلاحيات للمسؤول والمستخدم، يتصل بقاعدة بيانات Microsoft Access لإدارة المكتبة بأمان وسهولة." data-en="A Java GUI app with role-based access connecting to Microsoft Access for secure library management.">تطبيق Java بواجهة رسومية مع صلاحيات للمسؤول والمستخدم، يتصل بقاعدة بيانات Microsoft Access لإدارة المكتبة بأمان وسهولة.</p>
+          <div class="project-footer">
+            <div class="project-stack"><span class="tag">Java</span><span class="tag">GUI</span><span class="tag">MS Access</span></div>
+            <a href="https://github.com/Albarq-CS/MyRepo.git" target="_blank" class="project-link">GitHub →</a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card fade-up">
+        <div class="project-img" style="background:linear-gradient(135deg,#1a0d3c,#2a1a4a)">🤖</div>
+        <div class="project-body">
+          <p class="project-type">AI · CHATBOT · AUTOMATION</p>
+          <h3>Bookify AI Assistant</h3>
+          <p data-ar="مساعد ذكاء اصطناعي يجيب على استفسارات الطلاب، يجدول اجتماعات مع المشرفين، ويحفظ البيانات تلقائياً في Google Sheets." data-en="An AI assistant that answers student inquiries, schedules meetings with advisors, and saves data to Google Sheets.">مساعد ذكاء اصطناعي يجيب على استفسارات الطلاب، يجدول اجتماعات مع المشرفين، ويحفظ البيانات تلقائياً في Google Sheets.</p>
+          <div class="project-footer"><div class="project-stack"><span class="tag">AI</span><span class="tag">Python</span><span class="tag">Google Sheets</span></div></div>
+        </div>
+      </div>
+      <div class="project-card fade-up">
+        <div class="project-img" style="background:linear-gradient(135deg,#1a150d,#2a221a)">🕌</div>
+        <div class="project-body">
+          <p class="project-type">PYTHON · OOP · DATABASE</p>
+          <h3 data-ar="نظام إدارة بيانات المساجد" data-en="Mosque Data Management">نظام إدارة بيانات المساجد</h3>
+          <p data-ar="مشروع جامعي يُدير بيانات المساجد بواجهة Tkinter وقاعدة SQLite، مبني بمفاهيم OOP لإضافة البيانات وتعديلها وحذفها والبحث فيها." data-en="A university project managing mosque data with Tkinter GUI and SQLite, built using OOP for full CRUD operations.">مشروع جامعي يُدير بيانات المساجد بواجهة Tkinter وقاعدة SQLite، مبني بمفاهيم OOP لإضافة البيانات وتعديلها وحذفها والبحث فيها.</p>
+          <div class="project-footer">
+            <div class="project-stack"><span class="tag">Python</span><span class="tag">Tkinter</span><span class="tag">SQLite</span><span class="tag">OOP</span></div>
+            <a href="https://github.com/Albarq-CS/mosque.git" target="_blank" class="project-link">GitHub →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/Albarq-CS" target="_blank" class="github-banner fade-up">
+      <p data-ar="وغيرها من المشاريع على صفحتي في <span>GitHub</span>" data-en="More projects on my <span>GitHub</span> page">وغيرها من المشاريع على صفحتي في <span>GitHub</span></p>
+      <span style="color:var(--accent);font-family:'Space Mono',monospace;font-size:13px;white-space:nowrap">Albarq-CS ⚡ →</span>
+    </a>
+  </div>
+</section>
+
+<!-- CERTIFICATES -->
+<section id="certificates">
+  <div class="container">
+    <p class="section-label">/// CERTIFICATES</p>
+    <h2 class="section-title fade-up" data-ar="ما حصلت عليه" data-en="What I Earned">ما حصلت عليه</h2>
+    <p class="section-desc fade-up" data-ar="شهادات ودورات تعكس رحلتي في التعلم المستمر. اضغط لعرض أي شهادة." data-en="Certificates reflecting my learning journey. Click any to view it.">شهادات ودورات تعكس رحلتي في التعلم المستمر. اضغط لعرض أي شهادة.</p>
+    <div class="cert-grid">
+      <div class="cert-card fade-up"><div class="cert-icon">🏆</div><div class="cert-info"><h4 data-ar="مقدمة في الذكاء الاصطناعي" data-en="Introduction to AI">مقدمة في الذكاء الاصطناعي</h4><p>Coursera · Stanford Online</p><span class="cert-date">2024</span><button class="cert-btn" onclick="openCert(0)">عرض الشهادة ↗</button></div></div>
+      <div class="cert-card fade-up"><div class="cert-icon">🎯</div><div class="cert-info"><h4 data-ar="Python للعلوم والبيانات" data-en="Python for Data Science">Python للعلوم والبيانات</h4><p>IBM · Coursera</p><span class="cert-date">2024</span><button class="cert-btn" onclick="openCert(1)">عرض الشهادة ↗</button></div></div>
+      <div class="cert-card fade-up"><div class="cert-icon">⚡</div><div class="cert-info"><h4 data-ar="تطوير تطبيقات Laravel" data-en="Laravel Development">تطوير تطبيقات Laravel</h4><p>Udemy</p><span class="cert-date">2023</span><button class="cert-btn" onclick="openCert(2)">عرض الشهادة ↗</button></div></div>
+      <div class="cert-card fade-up"><div class="cert-icon">🌐</div><div class="cert-info"><h4 data-ar="أساسيات الشبكات" data-en="Networking Fundamentals">أساسيات الشبكات</h4><p>Cisco · Networking Academy</p><span class="cert-date">2023</span><button class="cert-btn" onclick="openCert(3)">عرض الشهادة ↗</button></div></div>
+      <div class="cert-card fade-up"><div class="cert-icon">🔐</div><div class="cert-info"><h4 data-ar="أمن المعلومات الأساسي" data-en="Cybersecurity Basics">أمن المعلومات الأساسي</h4><p>Google · Coursera</p><span class="cert-date">2023</span><button class="cert-btn" onclick="openCert(4)">عرض الشهادة ↗</button></div></div>
+      <div class="cert-card fade-up"><div class="cert-icon">📊</div><div class="cert-info"><h4 data-ar="تحليل البيانات مع Python" data-en="Data Analysis with Python">تحليل البيانات مع Python</h4><p>freeCodeCamp</p><span class="cert-date">2024</span><button class="cert-btn" onclick="openCert(5)">عرض الشهادة ↗</button></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERESTS -->
+<section id="interests">
+  <div class="container">
+    <p class="section-label">/// INTERESTS</p>
+    <h2 class="section-title fade-up" data-ar="ما يشغل تفكيري" data-en="What Drives Me">ما يشغل تفكيري</h2>
+    <p class="section-desc fade-up" data-ar="مجالات تثير فضولي وأتابع تطوراتها بشغف مستمر." data-en="Fields that spark my curiosity and I follow with continuous passion.">مجالات تثير فضولي وأتابع تطوراتها بشغف مستمر.</p>
+    <div class="interests-grid">
+      <div class="interest-item fade-up"><div class="interest-emoji">🤖</div><h4 data-ar="الذكاء الاصطناعي" data-en="Artificial Intelligence">الذكاء الاصطناعي</h4><p data-ar="مستقبل التقنية" data-en="Future of Tech">مستقبل التقنية</p></div>
+      <div class="interest-item fade-up"><div class="interest-emoji">💰</div><h4 data-ar="التقنية المالية" data-en="FinTech">التقنية المالية</h4><p data-ar="حلول مالية ذكية" data-en="Smart Finance">حلول مالية ذكية</p></div>
+      <div class="interest-item fade-up"><div class="interest-emoji">🔐</div><h4 data-ar="الأمن السيبراني" data-en="Cybersecurity">الأمن السيبراني</h4><p data-ar="حماية الأنظمة" data-en="Protecting Systems">حماية الأنظمة</p></div>
+      <div class="interest-item fade-up"><div class="interest-emoji">🚀</div><h4 data-ar="ريادة الأعمال" data-en="Entrepreneurship">ريادة الأعمال</h4><p data-ar="بناء منتجات ناجحة" data-en="Building Products">بناء منتجات ناجحة</p></div>
+      <div class="interest-item fade-up"><div class="interest-emoji">📊</div><h4 data-ar="علم البيانات" data-en="Data Science">علم البيانات</h4><p data-ar="استخراج الرؤى" data-en="Extracting Insights">استخراج الرؤى</p></div>
+      <div class="interest-item fade-up"><div class="interest-emoji">🌍</div><h4 data-ar="رؤية 2030" data-en="Vision 2030">رؤية 2030</h4><p data-ar="التحول الرقمي" data-en="Digital Transformation">التحول الرقمي</p></div>
+      <div class="interest-item fade-up"><div class="interest-emoji">🧠</div><h4 data-ar="التعلم المستمر" data-en="Lifelong Learning">التعلم المستمر</h4><p data-ar="دائماً أتطور" data-en="Always Growing">دائماً أتطور</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label">/// CONTACT</p>
+    <h2 class="section-title fade-up" data-ar="تواصل معي" data-en="Get In Touch">تواصل معي</h2>
+    <p class="section-desc fade-up" data-ar="أنا متاح للفرص الوظيفية والتعاون في المشاريع. لا تتردد في التواصل!" data-en="Available for job opportunities and project collaboration. Don't hesitate!">أنا متاح للفرص الوظيفية والتعاون في المشاريع. لا تتردد في التواصل!</p>
+    <div class="contact-grid">
+      <a href="https://www.linkedin.com/in/albarq-alfutaihi" target="_blank" class="contact-card fade-up">
+        <div class="contact-icon linkedin">💼</div><div class="contact-info"><h4>LinkedIn</h4><p>albarq-alfutaihi</p></div>
+      </a>
+      <a href="https://github.com/Albarq-CS" target="_blank" class="contact-card fade-up">
+        <div class="contact-icon github">🐙</div><div class="contact-info"><h4>GitHub</h4><p>Albarq-CS ⚡</p></div>
+      </a>
+      <a href="mailto:aq.tech10@gmail.com" class="contact-card fade-up">
+        <div class="contact-icon email">✉️</div><div class="contact-info"><h4>Email</h4><p>aq.tech10@gmail.com</p></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p data-ar="صنع بـ ⚡ بواسطة البرق الفتيحي · AI Product Engineer · 2025" data-en="Crafted with ⚡ by Al-Barq Al-Futaihi · AI Product Engineer · 2025">
+    صنع بـ ⚡ بواسطة <span>البرق الفتيحي</span> · AI Product Engineer · 2025
+  </p>
+</footer>
+
+<!-- Certificate Modal -->
+<div class="cert-modal-overlay" id="certModal" onclick="if(event.target===this)closeCertModal()">
+  <div class="cert-modal">
+    <button class="cert-modal-close" onclick="closeCertModal()">✕</button>
+    <div class="cert-modal-icon" id="modalIcon">🏆</div>
+    <h3 id="modalTitle"></h3>
+    <p class="cert-modal-source" id="modalSource"></p>
+    <div id="modalBtnWrap"></div>
+    <p class="cert-modal-note" id="modalNote"></p>
+  </div>
+</div>
+
+<!-- AI CHAT -->
+<div class="chat-fab">
+  <div class="chat-window hidden" id="chatWindow">
+    <div class="chat-header">
+      <div class="chat-avatar">⚡</div>
+      <div class="chat-header-info">
+        <h4 data-ar="مساعد البرق الذكي" data-en="Al-Barq AI Assistant">مساعد البرق الذكي</h4>
+        <p data-ar="● متصل الآن" data-en="● Online Now">● متصل الآن</p>
+      </div>
+      <button class="chat-close" onclick="toggleChat()">✕</button>
+    </div>
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg bot" id="welcomeMsg">مرحباً! 👋 أنا المساعد الذكي للبرق. اسألني عن مهاراته أو مشاريعه أو شهاداته!</div>
+    </div>
+    <div class="chat-suggestions" id="suggestions">
+      <button class="suggestion-btn" onclick="askSuggestion(this.textContent)">ما مشاريعه؟</button>
+      <button class="suggestion-btn" onclick="askSuggestion(this.textContent)">ما مهاراته؟</button>
+      <button class="suggestion-btn" onclick="askSuggestion(this.textContent)">ما شهاداته؟</button>
+      <button class="suggestion-btn" onclick="askSuggestion(this.textContent)">كيف أتواصل معه؟</button>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" class="chat-input" id="chatInput" placeholder="اسألني عن البرق..." onkeydown="if(event.key==='Enter')sendMessage()">
+      <button class="chat-send" id="sendBtn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+  <button class="chat-btn" onclick="toggleChat()">🤖<span class="notif">1</span></button>
+</div>
+
+<script>
+var currentLang = 'ar';
+
+function toggleLang() {
+  currentLang = currentLang === 'ar' ? 'en' : 'ar';
+  var html = document.documentElement;
+  html.lang = currentLang;
+  html.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('langBtn').textContent = currentLang === 'ar' ? 'EN' : 'عر';
+  document.querySelectorAll('[data-ar]').forEach(function(el) {
+    var t = el.getAttribute('data-' + currentLang);
+    if (t) el.innerHTML = t;
+  });
+  document.getElementById('chatInput').placeholder = currentLang === 'ar' ? 'اسألني عن البرق...' : 'Ask me about Al-Barq...';
+  document.getElementById('welcomeMsg').textContent = currentLang === 'ar'
+    ? 'مرحباً! 👋 أنا المساعد الذكي للبرق. اسألني عن مهاراته أو مشاريعه أو شهاداته!'
+    : "Hello! I'm Al-Barq's AI assistant. Ask me about his skills, projects, or certificates!";
+}
+
+// Cursor
+var cursor = document.getElementById('cursor');
+var cursorRing = document.getElementById('cursorRing');
+var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+document.addEventListener('mousemove', function(e) {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = (mouseX - 6) + 'px';
+  cursor.style.top = (mouseY - 6) + 'px';
+});
+function animateRing() {
+  ringX += (mouseX - ringX - 18) * 0.12;
+  ringY += (mouseY - ringY - 18) * 0.12;
+  cursorRing.style.left = ringX + 'px';
+  cursorRing.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+document.querySelectorAll('a, button').forEach(function(el) {
+  el.addEventListener('mouseenter', function() { cursor.style.transform = 'scale(2)'; });
+  el.addEventListener('mouseleave', function() { cursor.style.transform = 'scale(1)'; });
+});
+
+// Scroll animations
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry, i) {
+    if (entry.isIntersecting) {
+      setTimeout(function() { entry.target.classList.add('visible'); }, i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(function(el) { observer.observe(el); });
+
+// Certificate data
+var certData = [
+  { icon: '🏆', title_ar: 'مقدمة في الذكاء الاصطناعي', title_en: 'Introduction to AI', source: 'Coursera · Stanford Online', url: '' },
+  { icon: '🎯', title_ar: 'Python للعلوم والبيانات', title_en: 'Python for Data Science', source: 'IBM · Coursera', url: '' },
+  { icon: '⚡', title_ar: 'تطوير تطبيقات Laravel', title_en: 'Laravel Development', source: 'Udemy', url: '' },
+  { icon: '🌐', title_ar: 'أساسيات الشبكات', title_en: 'Networking Fundamentals', source: 'Cisco · Networking Academy', url: '' },
+  { icon: '🔐', title_ar: 'أمن المعلومات الأساسي', title_en: 'Cybersecurity Basics', source: 'Google · Coursera', url: '' },
+  { icon: '📊', title_ar: 'تحليل البيانات مع Python', title_en: 'Data Analysis with Python', source: 'freeCodeCamp', url: '' }
+];
+
+function openCert(index) {
+  var c = certData[index];
+  document.getElementById('modalIcon').textContent = c.icon;
+  document.getElementById('modalTitle').textContent = currentLang === 'ar' ? c.title_ar : c.title_en;
+  document.getElementById('modalSource').textContent = c.source;
+  var btnWrap = document.getElementById('modalBtnWrap');
+  var note = document.getElementById('modalNote');
+  if (c.url) {
+    btnWrap.innerHTML = '<a href="' + c.url + '" target="_blank" class="cert-modal-btn">' + (currentLang === 'ar' ? '🔗 فتح الشهادة' : '🔗 Open Certificate') + '</a>';
+    note.textContent = '';
+  } else {
+    btnWrap.innerHTML = '<button class="cert-modal-btn pending">' + (currentLang === 'ar' ? '⏳ الرابط قيد الإضافة' : '⏳ Link coming soon') + '</button>';
+    note.innerHTML = currentLang === 'ar'
+      ? 'لإضافة الرابط: ارفع الشهادة على <span>Google Drive</span> وشارك الرابط'
+      : 'To add: Upload to <span>Google Drive</span> and share the link';
+  }
+  document.getElementById('certModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCertModal() {
+  document.getElementById('certModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Chat
+var chatOpen = false;
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chatWindow').classList.toggle('hidden', !chatOpen);
+  if (chatOpen) {
+    document.querySelector('.chat-btn .notif').style.display = 'none';
+    document.getElementById('chatInput').focus();
+  }
+}
+function askSuggestion(t) {
+  document.getElementById('chatInput').value = t;
+  sendMessage();
+}
+
+function formatBotMessage(text) {
+  var lines = text.split('\n');
+  var html = '';
+  var inList = false;
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) { if (inList) { html += '</div>'; inList = false; } continue; }
+    var numberedMatch = line.match(/^(\d+)[.\s]\s*(.+)/);
+    var bulletMatch = line.match(/^[-*]\s+(.+)/);
+    var isSectionHeader = /\*\*(.+)\*\*/.test(line) && line.length < 80 && !numberedMatch;
+    if (isSectionHeader) {
+      if (inList) { html += '</div>'; inList = false; }
+      html += '<div class="bot-section-title">' + line.replace(/\*\*/g, '').replace(/:$/, '') + '</div>';
+    } else if (numberedMatch || bulletMatch) {
+      var content = numberedMatch ? numberedMatch[2] : bulletMatch[1];
+      var num = numberedMatch ? numberedMatch[1] : null;
+      if (!inList) { html += '<div class="bot-list">'; inList = true; }
+      var cleanContent = content.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      if (num) {
+        html += '<div class="bot-list-item"><span class="bot-num">' + num + '</span><span>' + cleanContent + '</span></div>';
+      } else {
+        html += '<div class="bot-list-item"><span class="bot-bullet">⚡</span><span>' + cleanContent + '</span></div>';
+      }
+    } else {
+      if (inList) { html += '</div>'; inList = false; }
+      html += '<div class="bot-para">' + line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') + '</div>';
+    }
+  }
+  if (inList) html += '</div>';
+  return html || '<div class="bot-para">' + text + '</div>';
+}
+
+function addMessage(text, type) {
+  var m = document.getElementById('chatMessages');
+  var d = document.createElement('div');
+  d.className = 'msg ' + type;
+  if (type === 'bot') { d.innerHTML = formatBotMessage(text); }
+  else { d.textContent = text; }
+  m.appendChild(d);
+  m.scrollTop = m.scrollHeight;
+}
+
+function addTyping() {
+  var m = document.getElementById('chatMessages');
+  var d = document.createElement('div');
+  d.className = 'msg bot typing';
+  d.id = 't' + Date.now();
+  d.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+  m.appendChild(d);
+  m.scrollTop = m.scrollHeight;
+  return d.id;
+}
+
+function removeTyping(id) {
+  var el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+var systemPrompt = 'انت مساعد ذكي لبورتفوليو البرق الفتيحي. اجب على اسئلة الزوار عنه بأسلوب ودود ومهني.\n\nمعلوماته:\n- الاسم: البرق حسان الفتيحي\n- التخصص: علوم الحاسب · جامعة القصيم · خريج جديد\n- المجال: AI Product Engineer\n- الموقع: المملكة العربية السعودية\n\nالتواصل:\n- LinkedIn: linkedin.com/in/albarq-alfutaihi\n- GitHub: github.com/Albarq-CS\n- Email: aq.tech10@gmail.com\n\nالمهارات: Python, PHP, Java, C++, C, HTML, CSS, MySQL | Laravel, Django | AI/ML, Networking, Cybersecurity, Web Dev | Git, GitHub, Linux, SQLite\n\nالمشاريع:\n1. GradTrack System - ادارة مشاريع التخرج (Laravel/PHP/MySQL)\n2. Online Library Management - Java GUI + MS Access\n3. Bookify AI Assistant - مساعد AI للطلاب + Google Sheets\n4. نظام ادارة بيانات المساجد - Python/Tkinter/SQLite/OOP\n\nالشهادات: مقدمة AI (Stanford 2024)، Python للبيانات (IBM 2024)، Laravel (Udemy 2023)، الشبكات (Cisco 2023)، امن المعلومات (Google 2023)، تحليل البيانات (freeCodeCamp 2024)\n\nالاهتمامات: AI, ML, تحليل البيانات, هندسة البرمجيات, الامن السيبراني, FinTech, ريادة الاعمال, رؤية 2030, التعلم المستمر\n\nقواعد التنسيق:\n- عند ذكر مشاريع: كل مشروع في سطر منفصل: 1. **الاسم** - وصف\n- عند ذكر مهارات/شهادات: قائمة مرقمة كل عنصر في سطر\n- افصل بين الاقسام بسطر فارغ\n- اجب بايجاز وترتيب\n- اذا سئلت عن العمر او الهاتف قل: آسف هذه معلومات شخصية لا اشاركها\n- الرد بلغة الزائر';
+
+function sendMessage() {
+  var input = document.getElementById('chatInput');
+  var sendBtn = document.getElementById('sendBtn');
+  var text = input.value.trim();
+  if (!text) return;
+  document.getElementById('suggestions').style.display = 'none';
+  addMessage(text, 'user');
+  input.value = '';
+  sendBtn.disabled = true;
+  var tid = addTyping();
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: text }]
+    })
+  }).then(function(r) { return r.json(); }).then(function(d) {
+    removeTyping(tid);
+    addMessage((d.content && d.content[0] && d.content[0].text) || 'عذراً، حدث خطأ.', 'bot');
+  }).catch(function() {
+    removeTyping(tid);
+    addMessage('عذراً، حدث خطأ في الاتصال.', 'bot');
+  }).finally(function() {
+    sendBtn.disabled = false;
+    input.focus();
+  });
+}
+</script>
+</body>
+</html>
